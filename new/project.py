@@ -174,13 +174,34 @@ def user_stats(df, month, day):
     start_time = time.time()
 
     # Display counts of user types
-    user_types = df['User Type'].value_counts()
-    print("\nVarious types of users are:\n{}".format(user_types))
+    if month != 'all' and day != 'all':
+        month_value = months.index(month) + 1
+        day_value = int(day) - 1
+        users_month = df.loc[df['month'] == month_value]
+        user_types = users_month.loc[users_month['day_of_week'] == day_value, 'User Type'].value_counts()
+        print("\nVarious types of users for {} in {} are:\n{}".format(days[day_value], month, user_types))
+    elif month != 'all':
+        month_value = months.index(month) + 1
+        user_types = df.loc[df['month'] == month_value, 'User Type'].value_counts()
+        print("\nVarious types of users for {} are:\n{}".format(month, user_types))
+    elif day != 'all':
+        day_value = int(day) - 1
+        user_types = df.loc[df['day_of_week'] == day_value, 'User Type'].value_counts()
+        print("\nVarious types of users for {} are:\n{}".format(days[day_value], user_types))
+    else:
+        user_types = df['User Type'].value_counts()
+        print("\nVarious types of users are:\n{}".format(user_types))
 
     # Display counts of gender
     if 'Gender' in df.columns:
         gender_count = df['Gender'].value_counts()
-        print("\nGender Ratio:\n{}".format(gender_count))
+        gender_type = input("\nWhich gender statistics would you prefer - male, female or both?\n")
+        if gender_type.lower() == 'male':
+            print("\nMales: {}\n".format(gender_count['Male']))
+        elif gender_type.lower() == 'female':
+            print("\nFemales: {}\n".format(gender_count['Female']))
+        elif gender_type.lower() == 'both':
+            print("\nMales, Females: {}, {}\n".format(gender_count['Male'], gender_count['Female']))
     else:
         print("\nNo data available for Gender\n")
 
