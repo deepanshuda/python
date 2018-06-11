@@ -172,10 +172,20 @@ def user_stats(df):
     start_time = time.time()
 
     # Display counts of user types
+    user_types = df['User Type'].value_counts()
+    print("\nVarious types of users are:\n{}".format(user_types))
 
     # Display counts of gender
+    gender_count = df['Gender'].value_counts()
+    print("\nGender Ratio:\n{}".format(gender_count))
 
     # Display earliest, most recent, and most common year of birth
+    earliest_year = df['Birth Year'].min()
+    recent_year = df['Birth Year'].max()
+    common_year = df['Birth Year'].value_counts().idxmax()
+    print("\nEarliest Year: {}\n".format(earliest_year))
+    print("\nRecent Year: {}\n".format(recent_year))
+    print("\nCommon Year: {}\n".format(common_year))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
@@ -199,6 +209,7 @@ def main():
     time_stats(df)
     station_stats(df)
     trip_duration_stats(df)
+    user_stats(df)
     # print("\n")
     # print(df.head())
 
