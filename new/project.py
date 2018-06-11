@@ -142,6 +142,8 @@ def station_stats(df):
     print("\nMost common end station is {}\n".format(common_end_station))
 
     # display most frequent combination of start station and end station trip
+    popular_trip = df.groupby(['Start Station', 'End Station']).size().reset_index().max()
+    print("\nMost Popular Trip\n{}".format(popular_trip))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
@@ -165,7 +167,7 @@ def trip_duration_stats(df):
     print('-' * 40)
 
 
-def user_stats(df):
+def user_stats(df, month, day):
     """Displays statistics on bikeshare users."""
 
     print('\nCalculating User Stats...\n')
@@ -176,16 +178,22 @@ def user_stats(df):
     print("\nVarious types of users are:\n{}".format(user_types))
 
     # Display counts of gender
-    gender_count = df['Gender'].value_counts()
-    print("\nGender Ratio:\n{}".format(gender_count))
+    if 'Gender' in df.columns:
+        gender_count = df['Gender'].value_counts()
+        print("\nGender Ratio:\n{}".format(gender_count))
+    else:
+        print("\nNo data available for Gender\n")
 
     # Display earliest, most recent, and most common year of birth
-    earliest_year = df['Birth Year'].min()
-    recent_year = df['Birth Year'].max()
-    common_year = df['Birth Year'].value_counts().idxmax()
-    print("\nEarliest Year: {}\n".format(earliest_year))
-    print("\nRecent Year: {}\n".format(recent_year))
-    print("\nCommon Year: {}\n".format(common_year))
+    if 'Birth Year' in df.columns:
+        earliest_year = df['Birth Year'].min()
+        recent_year = df['Birth Year'].max()
+        common_year = df['Birth Year'].value_counts().idxmax()
+        print("\nEarliest Year: {}\n".format(earliest_year))
+        print("\nRecent Year: {}\n".format(recent_year))
+        print("\nCommon Year: {}\n".format(common_year))
+    else:
+        print("\nNo data available for Birth Year\n")
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-' * 40)
@@ -209,7 +217,7 @@ def main():
     time_stats(df)
     station_stats(df)
     trip_duration_stats(df)
-    user_stats(df)
+    user_stats(df, month, day)
     # print("\n")
     # print(df.head())
 
